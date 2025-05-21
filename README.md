@@ -134,3 +134,55 @@ This project builds a **binary classifier** for aircraft damage detection and us
 - **Real-World Data Handling**: Programmatically downloaded, extracted, and structured dataset.
 
 -----
+
+
+-----
+
+## Additional Concepts
+
+### Why Set Random Seeds?
+
+Setting a random seed ensures **reproducibility** of your results.
+
+- Deep learning models involve randomness in:
+  - Weight initialization
+  - Data shuffling
+  - Dropout layers
+- Setting seeds for libraries like `numpy`, `random`, `tensorflow`, and `torch` helps produce the **same output** every time you run the code.
+
+**Example:**
+
+```python
+import random
+import numpy as np
+import tensorflow as tf
+
+seed = 42
+random.seed(seed)
+np.random.seed(seed)
+tf.random.set_seed(seed)
+```
+
+This is crucial for **debugging, sharing models, and research reproducibility**.
+
+-----
+
+### What Does Flattening Do?
+
+Flattening is the process of converting a **multi-dimensional tensor** (e.g., a 2D image) into a **1D vector**.
+
+- Neural networks typically require inputs to fully connected (dense) layers to be **one-dimensional**.
+- Images are 2D arrays (e.g., 28x28 in MNIST or 224x224 in VGG16).
+- Flattening reshapes these into vectors:  
+  `28x28 → 784` or `224x224x3 → 150528`
+
+**Use Case:**
+
+```python
+Flatten()  # Keras layer to flatten 2D/3D inputs into 1D
+```
+
+In both the **Autoencoder** and the **Aircraft Damage Detector**, flattening is used before feeding data into dense layers.
+
+**Summary:**
+- **Flattening** bridges the gap between convolutional layers (which process spatial data) and dense layers (which expect 1D vectors).
