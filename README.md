@@ -186,3 +186,59 @@ In both the **Autoencoder** and the **Aircraft Damage Detector**, flattening is 
 
 **Summary:**
 - **Flattening** bridges the gap between convolutional layers (which process spatial data) and dense layers (which expect 1D vectors).
+
+
+-----
+
+## Understanding `tf.py_function()` Usage
+
+### What Does This Line Do?
+
+```python
+return tf.py_function(process_image, [image_path_tensor, task_tensor], tf.string)
+```
+
+This line uses TensorFlow's `tf.py_function()` to wrap a **Python-native function** (`process_image`) so that it can be used in a **TensorFlow data pipeline**.
+
+### Why Use `tf.py_function()`?
+
+TensorFlow runs in **graph mode**, which requires all operations to be TensorFlow-compatible. However, if you're using:
+
+- Non-TensorFlow code (like **PyTorch**, **Hugging Face**, or standard Python I/O),
+- File system operations (e.g., reading an image from disk using `PIL`),
+- Or third-party libraries incompatible with the TF graph,
+
+you must use `tf.py_function()` to **bridge Python functions with TensorFlow pipelines**.
+
+### Breakdown of the Syntax
+
+```python
+tf.py_function(
+    func=process_image,                     # Your custom Python function
+    inp=[image_path_tensor, task_tensor],   # Inputs passed as Tensors
+    Tout=tf.string                          # Expected output data type (e.g., caption as string)
+)
+```
+
+- **`process_image`**: Your custom Python function that takes raw inputs (like file paths) and returns a string (caption or summary).
+- **`[image_path_tensor, task_tensor]`**: Tensor inputs to your function (converted to Python types inside the function).
+- **`tf.string`**: TensorFlow return type of the output (must be specified explicitly).
+
+### Example Use Case
+
+Used when calling the **BLIP captioning function** that:
+- Opens an image from disk
+- Feeds it into a PyTorch-based BLIP model
+- Returns the generated caption/summary
+
+Since all of this happens **outside of TensorFlow**, we use `tf.py_function()` to make it compatible within the pipeline.
+
+### Important Notes
+
+- Outputs of `tf.py_function()` are still TensorFlow tensors, but the function inside runs eagerly (like regular Python).
+- TensorFlow loses knowledge of the function's shape and dtype, so you often need to **manually set shapes and dtypes** afterward.
+- Use only when necessary, as it breaks full graph optimization.
+
+-----
+
+
