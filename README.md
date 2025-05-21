@@ -7,7 +7,7 @@ This repository contains **two separate deep learning projects** focusing on ima
 
 -----
 
-## Project 1: Autoencoder for MNIST Digits
+##  1: Autoencoder for MNIST Digits
 
 This project explores **autoencoders** for dimensionality reduction and image reconstruction using the **MNIST** handwritten digits dataset.
 
@@ -43,7 +43,7 @@ This project explores **autoencoders** for dimensionality reduction and image re
 
 -----
 
-## Project 2: Aircraft Damage Detection & Captioning
+##  2: Aircraft Damage Detection & Captioning
 
 This project builds a **binary classifier** for aircraft damage detection and uses the **BLIP** model for generating image captions and summaries.
 
